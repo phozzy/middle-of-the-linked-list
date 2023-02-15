@@ -55,14 +55,10 @@ pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
     list.reverse();
     let mut rev_iter = list.into_iter();
     let mut mid_list = ListNodeIter { list: None };
-    for _ in 0..middle {
+    for _ in 0..=middle {
         mid_list.add(rev_iter.next());
     }
     mid_list.list
-}
-
-pub fn add(left: usize, right: usize) -> usize {
-    left + right
 }
 
 #[cfg(test)]
@@ -70,8 +66,28 @@ mod tests {
     use super::*;
 
     #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+    fn elemnt5() {
+        let lnode = ListNode {
+            val: 1,
+            next: Some(Box::new(ListNode {
+                val: 2,
+                next: Some(Box::new(ListNode {
+                    val: 3,
+                    next: Some(Box::new(ListNode {
+                        val: 4,
+                        next: Some(Box::new(ListNode { val: 5, next: None })),
+                    })),
+                })),
+            })),
+        };
+        let mnode = Some(Box::new(ListNode {
+            val: 3,
+            next: Some(Box::new(ListNode {
+                val: 4,
+                next: Some(Box::new(ListNode { val: 5, next: None })),
+            })),
+        }));
+        let res = middle_node(Some(Box::new(lnode)));
+        assert_eq!(mnode, res);
     }
 }
