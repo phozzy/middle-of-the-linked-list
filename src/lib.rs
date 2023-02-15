@@ -51,11 +51,11 @@ impl Iterator for ListNodeIter {
 pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
     let list_iter = ListNodeIter { list: head };
     let mut list: Vec<i32> = list_iter.collect();
-    let middle = list.len() / 2;
+    let middle = list.len() / 2 + list.len() % 2;
     list.reverse();
     let mut rev_iter = list.into_iter();
     let mut mid_list = ListNodeIter { list: None };
-    for _ in 0..=middle {
+    for _ in 0..middle {
         mid_list.add(rev_iter.next());
     }
     mid_list.list
@@ -85,6 +85,35 @@ mod tests {
             next: Some(Box::new(ListNode {
                 val: 4,
                 next: Some(Box::new(ListNode { val: 5, next: None })),
+            })),
+        }));
+        let res = middle_node(Some(Box::new(lnode)));
+        assert_eq!(mnode, res);
+    }
+
+    #[test]
+    fn elemnt6() {
+        let lnode = ListNode {
+            val: 1,
+            next: Some(Box::new(ListNode {
+                val: 2,
+                next: Some(Box::new(ListNode {
+                    val: 3,
+                    next: Some(Box::new(ListNode {
+                        val: 4,
+                        next: Some(Box::new(ListNode {
+                            val: 5,
+                            next: Some(Box::new(ListNode { val: 6, next: None })),
+                        })),
+                    })),
+                })),
+            })),
+        };
+        let mnode = Some(Box::new(ListNode {
+            val: 4,
+            next: Some(Box::new(ListNode {
+                val: 5,
+                next: Some(Box::new(ListNode { val: 6, next: None })),
             })),
         }));
         let res = middle_node(Some(Box::new(lnode)));
