@@ -12,7 +12,7 @@ pub struct ListNodeIter {
 impl ListNodeIter {
     fn add(&mut self, val: Option<i32>) {
         if let Some(item) = val {
-            let current = self.list;
+            let current = self.list.to_owned();
             self.list = Some(Box::new(ListNode {
                 val: item,
                 next: current,
@@ -29,7 +29,7 @@ impl ListNode {
 
     fn iter(&self) -> ListNodeIter {
         ListNodeIter {
-            list: Some(Box::new(*self)),
+            list: Some(Box::new(self.to_owned())),
         }
     }
 }
@@ -37,7 +37,7 @@ impl ListNode {
 impl Iterator for ListNodeIter {
     type Item = i32;
     fn next(&mut self) -> Option<Self::Item> {
-        match self.list {
+        match self.list.to_owned() {
             Some(inner) => {
                 let ListNode { val, next } = *inner;
                 self.list = next;
@@ -53,6 +53,12 @@ pub fn middle_node(head: Option<Box<ListNode>>) -> Option<Box<ListNode>> {
     let mut list: Vec<i32> = list_iter.collect();
     let middle = list.len() / 2;
     list.reverse();
+    let mut rev_iter = list.into_iter();
+    let mut mid_list = ListNodeIter { list: None };
+    for _ in 0..middle {
+        mid_list.add(rev_iter.next());
+    }
+    mid_list.list
 }
 
 pub fn add(left: usize, right: usize) -> usize {
